@@ -1,128 +1,128 @@
 (() => {
-	const recordElement = document.querySelector('.record');
-	const clock = document.querySelector('.clock');
-	const buttons = document.querySelector('.buttons');
+  const clockElem = document.querySelector(".clock");
+  const buttonsElem = document.querySelector(".buttons");
+  const recordElem = document.querySelector(".record-cont");
 
-	let time = {m:0, s:0, ms:0};
-	let preTime = {m:0, s:0, ms:0};
-	let interval = null;
-	let numRecords = 0;
-
-
-
-	// Formatea un numero en "00".
-	const ft = n => ('0' + n).slice(-2);
-
-	// Devuelve el tiempo en formato "00:00.00".
-	const timeString = t => `${ft(t.m)}:${ft(t.s)}.${ft(t.ms)}`;
-	
-	// Actualiza el cronometro en el Dom.
-	const updateTime = () => clock.textContent = timeString(time);
-
-	
-
-	// Incrementares de tiempo.
-	const increaseMinutes = () => time.m < 99 ? time.m++ : 0;
-
-	const increaseSeconds = () => time.s == 59 ? (time.s = 0, increaseMinutes()) : time.s++;
-
-	const increaseMilliseconds = () => {
-		time.ms == 99 ? (time.ms = 0, increaseSeconds()) : time.ms++;
-		updateTime();
-	}
+  let time = { m: 0, s: 0, ms: 0 };
+  let preTime = { m: 0, s: 0, ms: 0 };
+  let numRecords = 0;
+  let interval;
 
 
 
-	// Controles del cronometro.
-	const startChronometer = () => interval == null ? interval = setInterval(increaseMilliseconds, 10) : 0;
-
-	const pauseChronometer = () => { clearInterval(interval); interval = null; }
-	
-	const restartChronometer = () => {
-		time = preTime = {m:0, s:0, ms:0};
-		updateTime();
-		numRecords = 0;
-		recordElement.innerHTML = '';
-		recordElement.classList.add('hide-record');
-	}
+  // Devuelve el tiempo en formato "00:00.00".
+  function formatTime(t) {
+    const f = (n) => ("0" + n).slice(-2);
+    return `${f(t.m)}:${f(t.s)}.${f(t.ms)}`;
+  }
 
 
 
-	// Calcula la diferencia entre dos tiempos.
-	const timeDifference = () => {
-		let timeCopy = Object.assign({}, time);
-		let dif = { m: 0, s: 0, ms: 0 };
-		let x = 0;
+  function calcDifferenceTime() {
+    // Convierte los tiempos a ms y los resta.
+    let dif =
+      time.m * 60000 +
+      time.s * 1000 +
+      time.ms * 10 -
+      (preTime.m * 60000 + preTime.s * 1000 + preTime.ms * 10);
 
-		if (timeCopy.ms >= preTime.ms) { dif.ms = timeCopy.ms - preTime.ms; }
-		else {
-			dif.ms = ('1' + ft(timeCopy.ms)) - preTime.ms;
-			x++;
-		}
-
-		x != 0 ? (timeCopy.s -= x, x--) : 0;
-
-		if (timeCopy.s >= preTime.s) { dif.s = timeCopy.s - preTime.s; }
-		else {
-			dif.s = ('1' + ft(timeCopy.s)) - preTime.s;
-			dif.s -= dif.s + preTime.s >= 60 ? 40 : 0;
-			x++;
-		}
-
-		timeCopy.m -= x;
-		timeCopy.m >= preTime.m ? dif.m = timeCopy.m - preTime.m : 0;
-
-		return dif;
-	}
+    // Convierte a m,s,ms los ms de diferencia.
+    return {
+      m: Math.floor(dif / 60000),
+      s: Math.floor((dif % 60000) / 1000),
+      ms: (dif % 1000) / 10
+    };
+  }
 
 
 
-	// Captura el record.
-	const captureRecord = () => {
-		numRecords++;
-		
-		const element = document.createElement('DIV');
-		element.classList.add('record__register');
-		element.innerHTML += `
-		<span class="record__register-num">
-			<i class="fa-solid fa-flag record-icon"></i>${ft(numRecords)}
-		</span>
-		<span class="record__difference">+ ${timeString(timeDifference())}</span>
-		<span class="record__time">${timeString(time)}</span>`;
-
-		recordElement.insertAdjacentElement('afterbegin', element);
-		preTime = Object.assign({}, time);
-	}
+  const renderTime = () => (clockElem.textContent = formatTime(time));
 
 
 
-	// Control de evento click de los botones.
-	buttons.addEventListener('click', (e) => {	
-		let nameBtn = e.target.classList.item(1);
-		let btns = buttons.children;
-		let CLASS = 'btnHide';
+  // Controla el incremento de tiempo.
+  function startChronometer() {
+    const increaseMinutes = () => (time.m < 99 ? time.m++ : 0);
 
-		if (nameBtn == 'fa-play') {
-			startChronometer();
-			btns[0].classList.add(CLASS)
-			btns[1].classList.add(CLASS)
-			btns[2].classList.remove(CLASS);
-			btns[3].classList.remove(CLASS);
-		}
-		else if (nameBtn == 'fa-pause') {
-			pauseChronometer();
-			btns[0].classList.remove(CLASS);
-			btns[1].classList.remove(CLASS);
-			btns[3].classList.add(CLASS);
-			btns[2].classList.add(CLASS);
-		}
-		else if (nameBtn == 'fa-stop') {
-			restartChronometer();
-			btns[0].classList.add(CLASS);
-		}
-		else if (nameBtn == 'fa-flag') {
-			captureRecord();
-			recordElement.classList.remove('hide-record');
-		}
-	});
+    const increaseSeconds = () => {
+      time.s == 59 ? ((time.s = 0), increaseMinutes()) : time.s++;
+    };
+
+    const increaseMilliseconds = () => {
+      time.ms == 99 ? ((time.ms = 0), increaseSeconds()) : time.ms++;
+      renderTime();
+    };
+
+    if (!interval) interval = setInterval(increaseMilliseconds, 10);
+  }
+
+
+
+  function pauseChronometer() {
+    clearInterval(interval);
+    interval = null;
+  }
+
+
+
+  const restartChronometer = () => {
+    time = preTime = { m: 0, s: 0, ms: 0 };
+    renderTime();
+    numRecords = 0;
+    recordElem.innerHTML = "";
+  };
+
+
+
+  function captureRecord() {
+    numRecords++;
+
+    const elem = document.createElement("div");
+    elem.classList.add("record");
+    elem.innerHTML += `
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M64 32C64 14.3 49.7 0 32 0S0 14.3 0 32V64 368 480c0 17.7 14.3 32 32 32s32-14.3 32-32V352l64.3-16.1c41.1-10.3 84.6-5.5 122.5 13.4c44.2 22.1 95.5 24.8 141.7 7.4l34.7-13c12.5-4.7 20.8-16.6 20.8-30V66.1c0-23-24.2-38-44.8-27.7l-9.6 4.8c-46.3 23.2-100.8 23.2-147.1 0c-35.1-17.6-75.4-22-113.5-12.5L64 48V32z"/></svg>
+        <span class="num">${numRecords}</span>
+      </div>
+      <span class="difference">+ ${formatTime(calcDifferenceTime())}</span>
+      <span class="time">${formatTime(time)}</span>`;
+
+    recordElem.insertAdjacentElement("afterbegin", elem);
+    preTime = Object.assign({}, time);
+  };
+
+
+
+  buttonsElem.addEventListener("click", (e) => {
+    const tag = e.target;
+    const btns = buttonsElem.children;
+    let idBtn = null;
+
+    if (tag.tagName == "BUTTON") idBtn = tag.id;
+    if (["path", "svg"].includes(tag.tagName)) idBtn = tag.closest("BUTTON").id;
+    if (!idBtn) return;
+
+    const actions = {
+      play: { action: startChronometer, addClass: [0, 1], removeClass: [2, 3] },
+      pause: {
+        action: pauseChronometer,
+        addClass: [2, 3],
+        removeClass: [0, 1],
+      },
+      stop: {
+        action: restartChronometer,
+        addClass: [0],
+        removeClass: [],
+      },
+      flag: {
+        action: captureRecord,
+        addClass: [],
+        removeClass: [],
+      },
+    };
+
+    actions[idBtn].action();
+    actions[idBtn].addClass.forEach((i) => btns[i].classList.add("hide"));
+    actions[idBtn].removeClass.forEach((i) => btns[i].classList.remove("hide"));
+  });
 })();

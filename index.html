@@ -4,7 +4,6 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Cronómetro</title>
-	<script src="https://kit.fontawesome.com/21cece7f89.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="main.css">
 </head>
 <body>
@@ -13,15 +12,23 @@
 		<div class="clock">00:00.00</div>
 
 		<div class="buttons">
-			<i class="fa-solid fa-stop btnHide"></i>
-			<i class="fa-solid fa-play"></i>
-			<i class="fa-solid fa-flag btnHide"></i>
-			<i class="fa-solid fa-pause btnHide"></i>
+			<button id="stop" class="hide">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z"/></svg>
+			</button>
+
+			<button id="play">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>
+			</button>
+			<button id="flag" class="hide">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M64 32C64 14.3 49.7 0 32 0S0 14.3 0 32V64 368 480c0 17.7 14.3 32 32 32s32-14.3 32-32V352l64.3-16.1c41.1-10.3 84.6-5.5 122.5 13.4c44.2 22.1 95.5 24.8 141.7 7.4l34.7-13c12.5-4.7 20.8-16.6 20.8-30V66.1c0-23-24.2-38-44.8-27.7l-9.6 4.8c-46.3 23.2-100.8 23.2-147.1 0c-35.1-17.6-75.4-22-113.5-12.5L64 48V32z"/></svg>
+			</button>
+			<button id="pause" class="hide">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"/></svg>
+			</button>
 		</div>
 
-		<div class="record hide-record"></div>
+		<div class="record-cont"></div>
 	</div>
-
 	<script src="script.js"></script>
 </body>
 </html>
