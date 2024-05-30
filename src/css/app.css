@@ -1,0 +1,51 @@
+:root {
+	--dark-charcoal: #151928;
+	--dark-slate-blue: #39446A;
+	--slate-gray: #6975A0;
+	--white: #FFFFFF;
+	--sky-blue: #41B3EF;
+}
+
+body {
+	background-color: var(--dark-charcoal);
+	color: white;
+}
+
+.container {
+	width: min(700px, 95%);
+	height: 100dvh;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+}
+
+.header {
+	padding: 40px 0;
+}
+
+.main {
+	flex-grow: 1;
+	position: relative;
+}
+
+.main section {
+	position: absolute;
+	top: 0;
+	left: 0;
+	inset: 0;
+	visibility: hidden;
+}
+
+.main .section--active {
+	visibility: visible;
+}
+
+
+
+
+
+@media screen and (width < 620px) {
+  .header {
+    order: 1;
+  }
+}

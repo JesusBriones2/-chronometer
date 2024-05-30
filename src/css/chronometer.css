@@ -1,0 +1,104 @@
+.chronometer {
+	display: flex;
+	flex-direction: column;
+	gap: 40px;
+	color: #b0b5c8;
+}
+
+.chronometer__clock {
+	text-align: center;
+	font-size: 4rem;
+	letter-spacing: 5px;
+}
+
+.chronometer__buttons {
+	user-select: none;
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+}
+
+.chronometer__buttons button {
+	--sizeBtn: 50px;
+	width: var(--sizeBtn);
+	height: var(--sizeBtn);
+	border: none;
+	border-radius: 50%;
+
+	background-color: #262c48;
+	color: inherit;
+	font-size: 20px;
+	transition: transform .3s;
+}
+
+.chronometer__buttons button:hover {
+	cursor: default;
+	background-color: #363d5b;
+}
+
+.chronometer__buttons button:active {
+	transform: scale(.8);
+}
+
+.chronometer__records {
+	flex-grow: 1;
+	display: grid;
+	gap: 10px;
+	align-content: start;
+
+	overflow: auto;
+	scrollbar-gutter: stable;
+	padding-right: 20px;
+	font-size: 20px;
+	text-align: right;
+}
+
+.chronometer__record {
+	display: grid;
+	grid-template-columns: max-content 1fr 1fr;
+	height: fit-content;
+}
+
+.chronometer__number {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.chronometer__number i {
+	font-size: 16px;
+}
+
+.chronometer__records::-webkit-scrollbar {
+	width: 10px;
+}
+
+.chronometer__records::-webkit-scrollbar-thumb {
+	background-color: #211f35;
+}
+
+.chronometer__records::-webkit-scrollbar-thumb:hover {
+	background-color: #332e5c;
+}
+
+
+/* 
+@keyframes addRecord{
+	100% {
+		opacity: 1;
+		height: 20px;
+	}
+}
+
+
+@media screen and (max-width:400px) {
+	.chronometer__buttons {
+		order: 1;
+		justify-content: space-evenly;
+		padding-top: 100px;
+	}
+
+	.chronometer__button {
+		--sizeBtn: 60px
+	}
+} */
